@@ -63,7 +63,7 @@ python tools/test.py --cfg_file tools/cfgs/waymo_models/dcdet.yaml --ckpt {path}
 ### Waymo Open Dataset validation
 |  Model  | mAP/H_L1 | mAP/H_L2 | Veh_L1 | Veh_L2 | Ped_L1 | Ped_L2 | Cyc_L1 | Cyc_L2 | Log |
 |---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
-|  [FSHNet(base)](tools/cfgs/fshnet_models/fshnet_base.yaml) |  81.8/79.7  | 75.7/73.8  | 82.3/81.9 | 74.5/74.0 | 86.2/81.1 | 79.2/74.2 | 80.4/79.3 | 77.6/76.5 | [Log](output/train_20250603-104134.log) |
+|  [FSHNet(base)](tools/cfgs/fshnet_models/fshnet_base.yaml) |  81.8/79.7  | 75.7/73.8  | 82.3/81.9 | 74.5/74.0 | 86.2/81.1 | 79.2/74.2 | 80.4/79.3 | 77.6/76.5 | [Log](output/train_fshnet_base_12e_50%.log) |
 
 ## Acknowledgement
 FSHNet is greatly inspired by the following outstanding contributions to the open-source community:</p>
