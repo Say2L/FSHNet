@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # FSHNet
 ## The code will come soon.
 =======
@@ -88,4 +87,3 @@ Please cite our paper if you find our work useful for your research:
     pages     = {8900-8909}
 }
 ```
->>>>>>> e381baa (initial commit)
