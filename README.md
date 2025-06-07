@@ -1,6 +1,4 @@
 # FSHNet
-## The code will come soon.
-=======
 ## ["FSHNet: Fully Sparse Hybrid Network for 3D Object Detection"](https://arxiv.org/abs/2506.03714)
 Our paper is accepted by CVPR2025. Thanks for the [OpenPCDet](https://github.com/open-mmlab/OpenPCDet), this implementation of the DCDet is mainly based on the pcdet v0.6.
 
@@ -60,14 +58,14 @@ python tools/test.py --cfg_file tools/cfgs/waymo_models/dcdet.yaml --ckpt {path}
 - [25-06-04] Release the [arXiv]((https://arxiv.org/abs/2506.03714)) version.
 - [25-06-07] Release the code on Waymo Open dataset.
 
-### Main results
+## Main results
 
-#### Waymo Open Dataset validation
+### Waymo Open Dataset validation
 |  Model  | mAP/H_L1 | mAP/H_L2 | Veh_L1 | Veh_L2 | Ped_L1 | Ped_L2 | Cyc_L1 | Cyc_L2 | Log |
 |---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 |  [FSHNet(base)](tools/cfgs/waymo_models/scatterformer.yaml) |  81.8/79.7  | 75.7/73.8  | 82.3/81.9 | 74.5/74.0 | 86.2/81.1 | 79.2/74.2 | 80.4/79.3 | 77.6/76.5 | [Log](output/fshnet_models/fshnet_base/default/train_20250603-104134.log) |
 
-### Acknowledgement
+## Acknowledgement
 FSHNet is greatly inspired by the following outstanding contributions to the open-source community:</p>
 <ul>
     <a href="https://github.com/skyhehe123/ScatterFormer" target="_blank">ScatterFormer</a> | <a href="https://github.com/Haiyang-W/DSVT" target="_blank">DSVT</a> 
