@@ -29,7 +29,7 @@ python setup.py develop
 python tools/train.py --cfg_file ${CONFIG_FILE}
 
 # e.g.,
-python tools/train.py --cfg_file tools/cfgs/waymo_models/dcdet.yaml
+python tools/train.py --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml
 ```
 
 - Train with multiple GPUs or multiple machines
@@ -40,7 +40,7 @@ bash tools/scripts/dist_train.sh ${NUM_GPUS} --cfg_file ${CONFIG_FILE}
 bash tools/scripts/slurm_train.sh ${PARTITION} ${JOB_NAME} ${NUM_GPUS} --cfg_file ${CONFIG_FILE}
 
 # e.g.,
-bash tools/scripts/dist_train.sh 8 --cfg_file tools/cfgs/waymo_models/dcdet.yaml
+bash tools/scripts/dist_train.sh 8 --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml
 ```
 
 ### 5. Test
@@ -51,7 +51,7 @@ bash tools/scripts/dist_train.sh 8 --cfg_file tools/cfgs/waymo_models/dcdet.yaml
 python tools/test.py --cfg_file ${CONFIG_FILE} --ckpt ${CKPT}
 
 # e.g., 
-python tools/test.py --cfg_file tools/cfgs/waymo_models/dcdet.yaml --ckpt {path}
+python tools/test.py --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml --ckpt {path}
 ```
 
 ## News
