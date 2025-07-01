@@ -8,6 +8,7 @@ from .spconv_unet import UNetV2
 from .dsvt import DSVT
 from .fshnet_light import FSHNet_light
 from .fshnet_base import FSHNet_base
+from .fshnet_nusc import FSHNet_nusc
 
 __all__ = {
     'VoxelBackBone8x': VoxelBackBone8x,
@@ -23,4 +24,5 @@ __all__ = {
     'DSVT': DSVT,
     'FSHNet_light': FSHNet_light,
     'FSHNet_base': FSHNet_base,
+    'FSHNet_nusc': FSHNet_nusc,
 }

@@ -661,7 +661,7 @@ def calculate_iou_loss_transfusionhead(iou_preds, batch_box_preds, gt_boxes, wei
     """    
     iou_target = iou3d_nms_utils.boxes_aligned_iou3d_gpu(batch_box_preds.reshape(-1, 7), gt_boxes.reshape(-1, 7)).view(-1)
     # valid_index = torch.nonzero(iou_target).squeeze(-1)
-    valid_index = torch.nonzero(iou_target * weights.view(-1)).squeeze(-1)
+    valid_index = torch.nonzero(iou_target * weights[:, :, 0].view(-1)).squeeze(-1)
     num_pos = valid_index.shape[0]
 
     iou_target = iou_target * 2 - 1  # [0, 1] ==> [-1, 1]
@@ -673,7 +673,7 @@ def calculate_iou_loss_transfusionhead(iou_preds, batch_box_preds, gt_boxes, wei
 
 def calculate_iou_reg_loss_transfusionhead(batch_box_preds, gt_boxes, weights, num_pos):
     
-    valid_index = torch.nonzero(weights[:, 0].view(-1)).squeeze(-1)
+    valid_index = torch.nonzero(weights[:, :, 0].view(-1)).squeeze(-1)
     iou = box_utils.bbox3d_overlaps_diou(batch_box_preds.reshape(-1, 7)[valid_index], gt_boxes.reshape(-1, 7)[valid_index])
     revalid_index = torch.nonzero(iou > 0).squeeze(-1)
     iou = iou[revalid_index]

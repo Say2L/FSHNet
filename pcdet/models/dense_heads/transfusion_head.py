@@ -10,6 +10,7 @@ from ..model_utils.transfusion_utils import PositionEmbeddingLearned, Transforme
 from .target_assigner.hungarian_assigner import HungarianAssigner3D
 from ...utils import loss_utils
 from ..model_utils import centernet_utils
+from ..model_utils import model_nms_utils
 
 
 class SeparateHead_Transfusion(nn.Module):
@@ -91,6 +92,12 @@ class TransFusionHead(nn.Module):
         self.loss_bbox_weight = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS['bbox_weight']
         self.loss_heatmap = loss_utils.GaussianFocalLoss()
         self.loss_heatmap_weight = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS['hm_weight']
+        if self.model_cfg.LOSS_CONFIG.get('LOSS_IOU_REG', False):
+            self.loss_iou_reg = True
+            self.loss_iou_reg_weight = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS['iou_reg_weight']
+        if self.model_cfg.LOSS_CONFIG.get('LOSS_IOU', False):
+            self.loss_iou = True
+            self.loss_iou_weight = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS['iou_weight']
 
         self.code_size = 10
 
@@ -121,6 +128,15 @@ class TransFusionHead(nn.Module):
         self.bev_pos = self.create_2D_grid(x_size, y_size)
 
         self.forward_ret_dict = {}
+
+        # NMS
+        self.nms_cfg = self.model_cfg.get("NMS_CONFIG",None)
+        # query local feature around proposals in Cross-Attention
+        self.query_local = self.model_cfg.get("QUERY_LOCAL",False)
+        if self.query_local:
+            self.query_radius = self.model_cfg.QUERY_RADIUS
+            self.query_range = torch.arange(-self.query_radius, self.query_radius+1)
+            self.query_r_coor_x, self.query_r_coor_y = torch.meshgrid(self.query_range, self.query_range) 
 
     def create_2D_grid(self, x_size, y_size):
         meshgrid = [[0, x_size - 1, x_size], [0, y_size - 1, y_size]]
@@ -155,7 +171,9 @@ class TransFusionHead(nn.Module):
         lidar_feat_flatten = lidar_feat.view(
             batch_size, lidar_feat.shape[1], -1
         )
-        bev_pos = self.bev_pos.repeat(batch_size, 1, 1).to(lidar_feat.device)
+        if str(self.bev_pos.device) == 'cpu':
+            self.bev_pos = self.bev_pos.to(lidar_feat.device)
+        bev_pos = self.bev_pos.repeat(batch_size, 1, 1)
 
         # query initialization
         dense_heatmap = self.heatmap_head(lidar_feat)
@@ -174,7 +192,8 @@ class TransFusionHead(nn.Module):
         elif self.dataset_name == "Waymo":
             local_max[ :, 1, ] = F.max_pool2d(heatmap[:, 1], kernel_size=1, stride=1, padding=0)
             local_max[ :, 2, ] = F.max_pool2d(heatmap[:, 2], kernel_size=1, stride=1, padding=0)
-        heatmap = heatmap * (heatmap == local_max)
+        # heatmap = heatmap * (heatmap == local_max)
+        x_grid, y_grid = heatmap.shape[-2:]
         heatmap = heatmap.view(batch_size, heatmap.shape[1], -1)
  
         # top num_proposals among all classes
@@ -202,10 +221,58 @@ class TransFusionHead(nn.Module):
         # convert to xy
         query_pos = query_pos.flip(dims=[-1])
         bev_pos = bev_pos.flip(dims=[-1])
-
-        query_feat = self.decoder(
-            query_feat, lidar_feat_flatten, query_pos, bev_pos
-        )
+        
+        if self.query_local:
+            # compute local key 
+            top_proposals_x = top_proposals_index // x_grid # bs, num_proposals
+            top_proposals_y = top_proposals_index % y_grid # bs, num_proposals
+            
+            # bs, num_proposal, radius * 2 + 1, radius * 2 + 1
+            if str(self.query_r_coor_x.device) == 'cpu':
+                self.query_r_coor_x = self.query_r_coor_x.to(top_proposals.device)
+                self.query_r_coor_y = self.query_r_coor_y.to(top_proposals.device)
+            top_proposals_key_x = top_proposals_x[:, :, None, None] + self.query_r_coor_x[None, None, :, :]
+            top_proposals_key_y = top_proposals_y[:, :, None, None] + self.query_r_coor_y[None, None, :, :]
+            top_proposals_key_x = torch.clamp(top_proposals_key_x, min=0, max=x_grid-1)
+            top_proposals_key_y = torch.clamp(top_proposals_key_y, min=0, max=y_grid-1)
+            # bs, num_proposals, key_num
+            top_proposals_key_index = top_proposals_key_x.view(batch_size, top_proposals_key_x.shape[1], -1) * x_grid + \
+                                                    top_proposals_key_y.view(batch_size, top_proposals_key_y.shape[1], -1)
+            key_mask = (top_proposals_key_index < 0) + (top_proposals_key_index >= (x_grid * y_grid))
+            top_proposals_key_index = torch.clamp(top_proposals_key_index, min=0, max=x_grid * y_grid-1) # bs, num_proposals, key_num
+            num_proposals = top_proposals_key_index.shape[1]
+            # bs, feat_dim, num_proposals * key_num
+            key_feat = lidar_feat_flatten.gather(
+                index=top_proposals_key_index.view(batch_size, 1, -1).expand(
+                    -1, lidar_feat_flatten.shape[1], -1),
+                dim=-1,) 
+            # bs, feat_dim, num_proposals, key_num
+            key_feat = key_feat.view(batch_size, lidar_feat_flatten.shape[1], num_proposals, -1) 
+            key_pos = bev_pos.gather(
+                index=top_proposals_key_index.view(batch_size, 1, -1)
+                .permute(0, 2, 1)
+                .expand(-1, -1, bev_pos.shape[-1]),
+                dim=1,)
+            # bs, num_proposals, key_num, 2
+            key_pos = key_pos.view(batch_size, num_proposals, -1, bev_pos.shape[-1])
+            # bs, num_proposals, feat_dim, key_num
+            key_feat = key_feat.permute(0, 2, 1, 3).reshape(batch_size*num_proposals, lidar_feat_flatten.shape[1], -1) 
+            # bs, num_proposals, key_num, 2
+            key_pos = key_pos.view(-1, key_pos.shape[2], key_pos.shape[-1]) 
+            key_padding_mask = key_mask.view(-1, key_mask.shape[-1])
+            # bs, num_proposals, feat_dim, 1
+            query_feat_T = query_feat.permute(0, 2, 1).reshape(batch_size*num_proposals, -1, 1) 
+            # bs, num_proposals, 1, 2
+            query_pos_T = query_pos.view(-1, 1, query_pos.shape[-1])
+            query_feat_T = self.decoder(
+                query_feat_T, key_feat, query_pos_T, key_pos, key_padding_mask=key_padding_mask
+            )
+            
+            query_feat = query_feat_T.reshape(batch_size, num_proposals, -1).permute(0, 2, 1)
+        else:
+            query_feat = self.decoder(
+                query_feat, lidar_feat_flatten, query_pos, bev_pos
+            )
         res_layer = self.prediction_head(query_feat)
         res_layer["center"] = res_layer["center"] + query_pos.permute(0, 2, 1)
 
@@ -218,10 +285,11 @@ class TransFusionHead(nn.Module):
         return res_layer
 
     def forward(self, batch_dict):
-        feats = batch_dict['spatial_features_2d']
+        feats = batch_dict['spatial_features_2d'].dense()
+
         res = self.predict(feats)
         if not self.training:
-            bboxes = self.get_bboxes(res)
+            bboxes = self.get_bboxes_v2(res)
             batch_dict['final_box_dicts'] = bboxes
         else:
             gt_boxes = batch_dict['gt_boxes']
@@ -289,8 +357,8 @@ class TransFusionHead(nn.Module):
             pos_gt_bboxes = gt_bboxes_3d[pos_assigned_gt_inds.long(), :]
 
         # create target for loss computation
-        bbox_targets = torch.zeros([num_proposals, self.code_size]).to(center.device)
-        bbox_weights = torch.zeros([num_proposals, self.code_size]).to(center.device)
+        bbox_targets = torch.zeros([num_proposals, self.code_size], device=center.device)
+        bbox_weights = torch.zeros([num_proposals, self.code_size], device=center.device)
         ious = torch.clamp(ious, min=0.0, max=1.0)
         labels = bboxes_tensor.new_zeros(num_proposals, dtype=torch.long)
         label_weights = bboxes_tensor.new_zeros(num_proposals, dtype=torch.long)
@@ -365,7 +433,7 @@ class TransFusionHead(nn.Module):
             cls_score, one_hot_targets, label_weights
         ).sum() / max(num_pos, 1)
 
-        preds = torch.cat([pred_dicts[head_name] for head_name in self.model_cfg.SEPARATE_HEAD_CFG.HEAD_ORDER], dim=1).permute(0, 2, 1)
+        preds = torch.cat([pred_dicts[head_name] for head_name in self.model_cfg.SEPARATE_HEAD_CFG.HEAD_ORDER if head_name != 'iou'], dim=1).permute(0, 2, 1)
         code_weights = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS['code_weights']
         reg_weights = bbox_weights * bbox_weights.new_tensor(code_weights)
 
@@ -376,6 +444,39 @@ class TransFusionHead(nn.Module):
         loss_dict["loss_bbox"] = loss_bbox.item() * self.loss_bbox_weight
         loss_all = loss_all + loss_cls * self.loss_cls_weight + loss_bbox * self.loss_bbox_weight
 
+        if "iou" in pred_dicts.keys() or self.model_cfg.LOSS_CONFIG.get('LOSS_IOU_REG', False):
+            bbox_targets_for_iou = bbox_targets.permute(0, 2, 1)
+            batch_box_targets_for_iou = self.decode_bbox_from_pred(bbox_targets_for_iou[:, 6:8, :].clone(),
+                                        bbox_targets_for_iou[:, 3:6, :].clone(), bbox_targets_for_iou[:, 0:2, :].clone(), 
+                                        bbox_targets_for_iou[:, 2:3, :].clone()) # (B, Proposal, 7)
+            center = pred_dicts["center"][...,: self.num_proposals]
+            height = pred_dicts["height"][..., : self.num_proposals]
+            rot = pred_dicts["rot"][..., : self.num_proposals]
+            dim = pred_dicts["dim"][..., : self.num_proposals]
+            
+            batch_box_preds = self.decode_bbox_from_pred(rot.clone(), dim.clone(),
+                                    center.clone(), height.clone()) # (B, Proposal, 7)
+
+            if "iou" in pred_dicts.keys():
+                batch_box_preds_for_iou = batch_box_preds.clone().detach() # (B, Proposal, 7)
+                batch_box_targets_for_iou = batch_box_targets_for_iou.detach() # (B, Proposal, 7)
+                iou_loss = loss_utils.calculate_iou_loss_transfusionhead(
+                    iou_preds=pred_dicts['iou'],  # (B, 1, Proposal)
+                    batch_box_preds=batch_box_preds_for_iou,
+                    gt_boxes=batch_box_targets_for_iou,
+                    weights=bbox_weights,
+                    num_pos=num_pos
+                )
+                loss_all += (iou_loss * self.loss_iou_weight)
+                loss_dict["loss_iou"] = iou_loss.item() * self.loss_iou_weight
+
+            if self.model_cfg.LOSS_CONFIG.get('LOSS_IOU_REG', False):
+                iou_reg_loss = loss_utils.calculate_iou_reg_loss_transfusionhead(
+                    batch_box_preds=batch_box_preds, gt_boxes=batch_box_targets_for_iou,
+                    weights=bbox_weights[:, :, :7], num_pos=num_pos)
+                loss_all += (iou_reg_loss * self.loss_iou_reg_weight)
+                loss_dict["loss_iou_reg"] = iou_reg_loss.item() * self.loss_iou_reg_weight
+
         loss_dict[f"matched_ious"] = loss_cls.new_tensor(matched_ious)
         loss_dict['loss_trans'] = loss_all
 
@@ -383,7 +484,7 @@ class TransFusionHead(nn.Module):
 
     def encode_bbox(self, bboxes):
         code_size = 10
-        targets = torch.zeros([bboxes.shape[0], code_size]).to(bboxes.device)
+        targets = torch.zeros([bboxes.shape[0], code_size], device=bboxes.device)
         targets[:, 0] = (bboxes[:, 0] - self.point_cloud_range[0]) / (self.feature_map_stride * self.voxel_size[0])
         targets[:, 1] = (bboxes[:, 1] - self.point_cloud_range[1]) / (self.feature_map_stride * self.voxel_size[1])
         targets[:, 3:6] = bboxes[:, 3:6].log()
@@ -446,12 +547,177 @@ class TransFusionHead(nn.Module):
                 'pred_boxes': boxes3d,
                 'pred_scores': scores,
                 'pred_labels': labels,
+                'cmask':cmask,
             }
 
             predictions_dicts.append(predictions_dict)
 
         return predictions_dicts
 
+    def decode_bbox_from_pred(self, rot, dim, center, height, head_index=None):
+        # change size to real world metric
+        if head_index is not None:
+            center[:, 0, :] = center[:, 0, :] * self.feature_map_stride[head_index] * self.voxel_size[0] + self.point_cloud_range[0]
+            center[:, 1, :] = center[:, 1, :] * self.feature_map_stride[head_index] * self.voxel_size[1] + self.point_cloud_range[1]
+        else:
+            center[:, 0, :] = center[:, 0, :] * self.feature_map_stride * self.voxel_size[0] + self.point_cloud_range[0]
+            center[:, 1, :] = center[:, 1, :] * self.feature_map_stride * self.voxel_size[1] + self.point_cloud_range[1]
+        dim[:, 0, :] = dim[:, 0, :].exp()
+        dim[:, 1, :] = dim[:, 1, :].exp()
+        dim[:, 2, :] = dim[:, 2, :].exp()
+        rots, rotc = rot[:, 0:1, :], rot[:, 1:2, :]
+        rot = torch.atan2(rots, rotc)
+        final_box_preds = torch.cat([center, height, dim, rot], dim=1).permute(0, 2, 1)
+        return final_box_preds
+
+    
+    def get_bboxes_v2(self, preds_dicts):
+
+        batch_size = preds_dicts["heatmap"].shape[0]
+        batch_score = preds_dicts["heatmap"].sigmoid()
+        one_hot = F.one_hot(
+            self.query_labels, num_classes=self.num_classes
+        ).permute(0, 2, 1)
+        batch_score = batch_score * preds_dicts["query_heatmap_score"] * one_hot
+        batch_center = preds_dicts["center"]
+        batch_height = preds_dicts["height"]
+        batch_dim = preds_dicts["dim"]
+        batch_rot = preds_dicts["rot"]
+        batch_vel = None
+        if "vel" in preds_dicts:
+            batch_vel = preds_dicts["vel"]
+        batch_iou = (preds_dicts['iou'] + 1) * 0.5 if 'iou' in preds_dicts else None
+
+        ret_dict = self.decode_bbox(
+            batch_score, batch_rot, batch_dim,
+            batch_center, batch_height, batch_vel,
+            filter=True,
+        )
+        if self.dataset_name == "nuScenes":
+                self.tasks = [
+                    # dict(
+                    #     num_class=8,
+                    #     class_names=[],
+                    #     indices=[0, 1, 2, 3, 4, 5, 6, 7],
+                    #     radius=-1,
+                    # ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[0],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[1],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[2],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[3],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[4],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[5],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[6],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=[],
+                        indices=[7],
+                        radius=0.2,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=["pedestrian"],
+                        indices=[8],
+                        radius=0.175,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=["traffic_cone"],
+                        indices=[9],
+                        radius=0.175,
+                    ),
+                ]
+        elif self.dataset_name == "Waymo":
+            self.tasks = [
+                dict(num_class=1, class_names=["Car"], indices=[0], radius=0.7),
+                dict(
+                    num_class=1, class_names=["Pedestrian"], indices=[1], radius=0.7
+                ),
+                dict(num_class=1, class_names=["Cyclist"], indices=[2], radius=0.7),
+            ]
+        for i in range(batch_size):
+            boxes3d = ret_dict[i]["pred_boxes"]
+            scores = ret_dict[i]["pred_scores"]
+            labels = ret_dict[i]["pred_labels"]
+            cmask = ret_dict[i]['cmask']
+
+            # IOU refine 
+            if self.model_cfg.POST_PROCESSING.get('USE_IOU_TO_RECTIFY_SCORE', False) and batch_iou is not None:
+                pred_iou = torch.clamp(batch_iou[i][0][cmask], min=0, max=1.0)
+                IOU_RECTIFIER = scores.new_tensor(self.model_cfg.POST_PROCESSING.IOU_RECTIFIER)
+                if len(IOU_RECTIFIER) == 1:
+                    IOU_RECTIFIER = IOU_RECTIFIER.repeat(self.num_classes)
+                scores = torch.pow(scores, 1 - IOU_RECTIFIER[labels]) * torch.pow(pred_iou, IOU_RECTIFIER[labels])
+            
+
+            if self.nms_cfg != None:
+                keep_mask = torch.zeros_like(scores)
+                for task in self.tasks:
+                    task_mask = torch.zeros_like(scores)
+                    for cls_idx in task["indices"]:
+                        task_mask += labels == cls_idx
+                    task_mask = task_mask.bool()
+                    if task["radius"] > 0:
+                        top_scores = scores[task_mask]
+                        boxes_for_nms = boxes3d[task_mask][:, :7].clone().detach()
+                        task_nms_config = copy.deepcopy(self.nms_cfg)
+                        task_nms_config.NMS_THRESH = task["radius"]
+                        task_keep_indices, _ = model_nms_utils.class_agnostic_nms(
+                                box_scores=top_scores, box_preds=boxes_for_nms,
+                                nms_config=task_nms_config, score_thresh=task_nms_config.SCORE_THRES)
+                    else:
+                        task_keep_indices = torch.arange(task_mask.sum())
+                    if task_keep_indices.shape[0] != 0:
+                        keep_indices = torch.where(task_mask != 0)[0][
+                            task_keep_indices
+                        ]
+                        keep_mask[keep_indices] = 1
+                keep_mask = keep_mask.bool()
+                ret_dict[i]['pred_boxes'] = boxes3d[keep_mask]
+                ret_dict[i]['pred_scores'] = scores[keep_mask]
+                ret_dict[i]['pred_labels'] = labels[keep_mask].int() + 1
+            else:  
+                # no nms
+                ret_dict[i]['pred_labels'] = ret_dict[i]['pred_labels'].int() + 1
+
+
+        return ret_dict 
+    
     def get_bboxes(self, preds_dicts):
 
         batch_size = preds_dicts["heatmap"].shape[0]
@@ -467,13 +733,86 @@ class TransFusionHead(nn.Module):
         batch_vel = None
         if "vel" in preds_dicts:
             batch_vel = preds_dicts["vel"]
+        batch_iou = (preds_dicts['iou'] + 1) * 0.5 if 'iou' in preds_dicts else None
 
         ret_dict = self.decode_bbox(
             batch_score, batch_rot, batch_dim,
             batch_center, batch_height, batch_vel,
             filter=True,
         )
-        for k in range(batch_size):
-            ret_dict[k]['pred_labels'] = ret_dict[k]['pred_labels'].int() + 1
+        if self.dataset_name == "nuScenes":
+                self.tasks = [
+                    dict(
+                        num_class=8,
+                        class_names=[],
+                        indices=[0, 1, 2, 3, 4, 5, 6, 7],
+                        radius=-1,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=["pedestrian"],
+                        indices=[8],
+                        radius=0.175,
+                    ),
+                    dict(
+                        num_class=1,
+                        class_names=["traffic_cone"],
+                        indices=[9],
+                        radius=0.175,
+                    ),
+                ]
+        elif self.dataset_name == "Waymo":
+            self.tasks = [
+                dict(num_class=1, class_names=["Car"], indices=[0], radius=0.7),
+                dict(
+                    num_class=1, class_names=["Pedestrian"], indices=[1], radius=0.7
+                ),
+                dict(num_class=1, class_names=["Cyclist"], indices=[2], radius=0.7),
+            ]
+        for i in range(batch_size):
+            boxes3d = ret_dict[i]["pred_boxes"]
+            scores = ret_dict[i]["pred_scores"]
+            labels = ret_dict[i]["pred_labels"]
+            cmask = ret_dict[i]['cmask']
+
+            # IOU refine 
+            if self.model_cfg.POST_PROCESSING.get('USE_IOU_TO_RECTIFY_SCORE', False) and batch_iou is not None:
+                pred_iou = torch.clamp(batch_iou[i][0][cmask], min=0, max=1.0)
+                IOU_RECTIFIER = scores.new_tensor(self.model_cfg.POST_PROCESSING.IOU_RECTIFIER)
+                if len(IOU_RECTIFIER) == 1:
+                    IOU_RECTIFIER = IOU_RECTIFIER.repeat(self.num_classes)
+                scores = torch.pow(scores, 1 - IOU_RECTIFIER[labels]) * torch.pow(pred_iou, IOU_RECTIFIER[labels])
+            
+
+            if self.nms_cfg != None:
+                keep_mask = torch.zeros_like(scores)
+                for task in self.tasks:
+                    task_mask = torch.zeros_like(scores)
+                    for cls_idx in task["indices"]:
+                        task_mask += labels == cls_idx
+                    task_mask = task_mask.bool()
+                    if task["radius"] > 0:
+                        top_scores = scores[task_mask]
+                        boxes_for_nms = boxes3d[task_mask][:, :7].clone().detach()
+                        task_nms_config = copy.deepcopy(self.nms_cfg)
+                        task_nms_config.NMS_THRESH = task["radius"]
+                        task_keep_indices, _ = model_nms_utils.class_agnostic_nms(
+                                box_scores=top_scores, box_preds=boxes_for_nms,
+                                nms_config=task_nms_config, score_thresh=task_nms_config.SCORE_THRES)
+                    else:
+                        task_keep_indices = torch.arange(task_mask.sum())
+                    if task_keep_indices.shape[0] != 0:
+                        keep_indices = torch.where(task_mask != 0)[0][
+                            task_keep_indices
+                        ]
+                        keep_mask[keep_indices] = 1
+                keep_mask = keep_mask.bool()
+                ret_dict[i]['pred_boxes'] = boxes3d[keep_mask]
+                ret_dict[i]['pred_scores'] = scores[keep_mask]
+                ret_dict[i]['pred_labels'] = labels[keep_mask].int() + 1
+            else:  
+                # no nms
+                ret_dict[i]['pred_labels'] = ret_dict[i]['pred_labels'].int() + 1
+
 
         return ret_dict 
