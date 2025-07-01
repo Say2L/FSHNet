@@ -7,13 +7,23 @@ Abstract: Fully sparse 3D detectors have recently gained significant attention d
 ### 1. Recommended Environment
 
 - Linux (tested on Ubuntu 20.04)
-- Python 3.6+
+- Python 3.6+ (tested on Python 3.8)
 - PyTorch 1.1 or higher (tested on PyTorch 1.13)
 - CUDA 9.0 or higher (tested on 11.6)
 
 ### 2. Set the Environment
 ```shell
+conda create -n fshnet python=3.8
+
+conda activate fshnet
+
+pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --index-url https://download.pytorch.org/whl/cu116
+
+wget https://data.pyg.org/whl/torch-1.13.0%2Bcu116/torch_scatter-2.1.1%2Bpt113cu116-cp38-cp38-linux_x86_64.whl
+pip install torch_scatter-2.1.1+pt113cu116-cp38-cp38-linux_x86_64.whl
+
 pip install -r requirement.txt
+
 python setup.py develop
 ```
 
