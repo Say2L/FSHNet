@@ -24,7 +24,7 @@ DATA_CONFIG:
               DB_INFO_PATH:
                 - nuscenes_dbinfos_10sweeps_withvelo.pkl
 
-              USE_SHARED_MEMORY: True
+              USE_SHARED_MEMORY: False
               DB_DATA_PATH:
                 - nuscenes_dbinfos_10sweeps_withvelo_global.npy
 
