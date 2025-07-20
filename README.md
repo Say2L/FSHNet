@@ -77,9 +77,9 @@ python tools/test.py --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml --ckpt 
 |  [FSHNet(base)](tools/cfgs/waymo_models/fshnet_base.yaml) |  83.0/80.8  | 77.1/74.9  | 82.3/81.9 | 74.5/74.0 | 86.2/81.1 | 79.2/74.2 | 80.4/79.3 | 77.6/76.5 | [Log](output/train_fshnet_base_12e_50.log) |
 
 ### NuScenes dataset validation
-|  Model  | mAP | NDS | Log |
-|---------|--------|--------|--------|
-|  [FSHNet](tools/cfgs/nuscenes_models/fshnet.yaml) |  68.6  |  71.8  | [Log](output/train_fshnet_nusc_36e.log) |
+|  Model  | mAP | NDS | Log | ckpt
+|---------|--------|--------|--------|--------|
+|  [FSHNet](tools/cfgs/nuscenes_models/fshnet.yaml) |  68.6  |  71.8  | [Log](output/train_fshnet_nusc_36e.log) | [ckpt](https://drive.google.com/file/d/1cGcC8Z1JUWxp5jQ4_y3kpnZmaEyx1-jl/view?usp=sharing)
 
 ## Acknowledgement
 FSHNet is greatly inspired by the following outstanding contributions to the open-source community:</p>
