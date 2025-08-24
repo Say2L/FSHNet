@@ -9,6 +9,7 @@ from .dsvt import DSVT
 from .fshnet_light import FSHNet_light
 from .fshnet_base import FSHNet_base
 from .fshnet_nusc import FSHNet_nusc
+from .fshnet_argo2 import FSHNet_argo2
 
 __all__ = {
     'VoxelBackBone8x': VoxelBackBone8x,
@@ -25,4 +26,5 @@ __all__ = {
     'FSHNet_light': FSHNet_light,
     'FSHNet_base': FSHNet_base,
     'FSHNet_nusc': FSHNet_nusc,
+    'FSHNet_argo2': FSHNet_argo2,
 }
