@@ -68,6 +68,7 @@ python tools/test.py --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml --ckpt 
 - [25-06-04] Release the [arXiv]((https://arxiv.org/abs/2506.03714)) version.
 - [25-06-07] Release the code on Waymo Open dataset.
 - [25-07-02] Release the config and code on the nuScenes dataset. 
+- [25-08-24] Release the config and code on the Argoverse2 dataset. 
 
 ## Main results
 
@@ -80,6 +81,11 @@ python tools/test.py --cfg_file tools/cfgs/waymo_models/fshnet_base.yaml --ckpt 
 |  Model  | mAP | NDS | Log | ckpt
 |---------|--------|--------|--------|--------|
 |  [FSHNet](tools/cfgs/nuscenes_models/fshnet.yaml) |  68.6  |  71.8  | [Log](output/train_fshnet_nusc_36e.log) | [ckpt](https://drive.google.com/file/d/1cGcC8Z1JUWxp5jQ4_y3kpnZmaEyx1-jl/view?usp=sharing)
+
+### Argoverse2 dataset validation
+|  Model  | mAP  | Log | ckpt
+|---------|--------|--------|--------|
+|  [FSHNet](tools/cfgs/argoverse_models/fshnet.yaml) |  40.2  | [Log](output/train_fshnet_argo2_12e.log) | [ckpt](https://drive.google.com/file/d/1Dcgc25CgltEXgddhotHBgWFdJYDxkUUV/view?usp=sharing)
 
 ## Acknowledgement
 FSHNet is greatly inspired by the following outstanding contributions to the open-source community:</p>

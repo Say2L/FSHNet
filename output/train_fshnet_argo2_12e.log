@@ -1,0 +1,1292 @@
+2024-10-27 08:56:15,137   INFO  **********************Start logging**********************
+2024-10-27 08:56:15,138   INFO  CUDA_VISIBLE_DEVICES=4, 5, 6, 7
+2024-10-27 08:56:15,138   INFO  Training in distributed mode : total_batch_size: 16
+2024-10-27 08:56:15,138   INFO  cfg_file         /home/liush/OpenPCDet_argo2/tools/cfgs/argo2_models/cbgs_voxel01_safdnet_slot_dy.yaml
+2024-10-27 08:56:15,138   INFO  batch_size       4
+2024-10-27 08:56:15,138   INFO  epochs           12
+2024-10-27 08:56:15,138   INFO  workers          4
+2024-10-27 08:56:15,138   INFO  extra_tag        default
+2024-10-27 08:56:15,138   INFO  ckpt             None
+2024-10-27 08:56:15,138   INFO  pretrained_model None
+2024-10-27 08:56:15,139   INFO  launcher         pytorch
+2024-10-27 08:56:15,139   INFO  tcp_port         18888
+2024-10-27 08:56:15,139   INFO  sync_bn          False
+2024-10-27 08:56:15,139   INFO  fix_random_seed  False
+2024-10-27 08:56:15,139   INFO  ckpt_save_interval 1
+2024-10-27 08:56:15,139   INFO  local_rank       0
+2024-10-27 08:56:15,139   INFO  max_ckpt_save_num 30
+2024-10-27 08:56:15,139   INFO  merge_all_iters_to_one_epoch False
+2024-10-27 08:56:15,139   INFO  set_cfgs         None
+2024-10-27 08:56:15,139   INFO  max_waiting_mins 0
+2024-10-27 08:56:15,139   INFO  start_epoch      0
+2024-10-27 08:56:15,140   INFO  num_epochs_to_eval 0
+2024-10-27 08:56:15,140   INFO  save_to_file     False
+2024-10-27 08:56:15,140   INFO  use_tqdm_to_record True
+2024-10-27 08:56:15,140   INFO  logger_iter_interval 50
+2024-10-27 08:56:15,140   INFO  ckpt_save_time_interval 300
+2024-10-27 08:56:15,140   INFO  wo_gpu_stat      False
+2024-10-27 08:56:15,140   INFO  use_amp          False
+2024-10-27 08:56:15,140   INFO  cfg.ROOT_DIR: /home/liush/OpenPCDet_argo2
+2024-10-27 08:56:15,140   INFO  cfg.LOCAL_RANK: 0
+2024-10-27 08:56:15,140   INFO  cfg.CLASS_NAMES: ['Regular_vehicle', 'Pedestrian', 'Bicyclist', 'Motorcyclist', 'Wheeled_rider', 'Bollard', 'Construction_cone', 'Sign', 'Construction_barrel', 'Stop_sign', 'Mobile_pedestrian_crossing_sign', 'Large_vehicle', 'Bus', 'Box_truck', 'Truck', 'Vehicular_trailer', 'Truck_cab', 'School_bus', 'Articulated_bus', 'Message_board_trailer', 'Bicycle', 'Motorcycle', 'Wheeled_device', 'Wheelchair', 'Stroller', 'Dog']
+2024-10-27 08:56:15,140   INFO  ----------- DATA_CONFIG -----------
+2024-10-27 08:56:15,140   INFO  cfg.DATA_CONFIG.DATASET: Argo2Dataset
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.DATA_PATH: /home/liush/datasets/argo2
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.POINT_CLOUD_RANGE: [-200, -200, -4, 200, 200, 4]
+2024-10-27 08:56:15,141   INFO  ----------- DATA_SPLIT -----------
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.DATA_SPLIT.train: train
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.DATA_SPLIT.test: val
+2024-10-27 08:56:15,141   INFO  ----------- INFO_PATH -----------
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.INFO_PATH.train: ['argo2_infos_train.pkl']
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.INFO_PATH.test: ['argo2_infos_val.pkl']
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.GET_ITEM_LIST: ['points']
+2024-10-27 08:56:15,141   INFO  ----------- DATA_AUGMENTOR -----------
+2024-10-27 08:56:15,141   INFO  cfg.DATA_CONFIG.DATA_AUGMENTOR.DISABLE_AUG_LIST: ['placeholder']
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.DATA_AUGMENTOR.AUG_CONFIG_LIST: [{'NAME': 'gt_sampling', 'DB_INFO_PATH': ['argo2_dbinfos.pkl'], 'USE_SHARED_MEMORY': True, 'DB_DATA_PATH': ['argo2_dbinfos_global.npy'], 'PREPARE': {'filter_by_min_points': ['Regular_vehicle:5', 'Pedestrian:5', 'Bicyclist:5', 'Motorcyclist:5', 'Wheeled_rider:5', 'Bollard:5', 'Construction_cone:5', 'Sign:5', 'Construction_barrel:5', 'Stop_sign:5', 'Mobile_pedestrian_crossing_sign:5', 'Large_vehicle:5', 'Bus:5', 'Box_truck:5', 'Truck:5', 'Vehicular_trailer:5', 'Truck_cab:5', 'School_bus:5', 'Articulated_bus:5', 'Message_board_trailer:5', 'Bicycle:5', 'Motorcycle:5', 'Wheeled_device:5', 'Wheelchair:5', 'Stroller:5', 'Dog:5']}, 'SAMPLE_GROUPS': ['Regular_vehicle:1', 'Pedestrian:2', 'Bicyclist:2', 'Motorcyclist:2', 'Wheeled_rider:2', 'Bollard:2', 'Construction_cone:2', 'Sign:2', 'Construction_barrel:2', 'Stop_sign:2', 'Mobile_pedestrian_crossing_sign:1', 'Large_vehicle:1', 'Bus:1', 'Box_truck:1', 'Truck:1', 'Vehicular_trailer:1', 'Truck_cab:1', 'School_bus:1', 'Articulated_bus:1', 'Message_board_trailer:2', 'Bicycle:2', 'Motorcycle:2', 'Wheeled_device:2', 'Wheelchair:2', 'Stroller:2', 'Dog:2'], 'NUM_POINT_FEATURES': 4, 'DATABASE_WITH_FAKELIDAR': False, 'REMOVE_EXTRA_WIDTH': [0.0, 0.0, 0.0], 'LIMIT_WHOLE_SCENE': True}, {'NAME': 'random_world_flip', 'ALONG_AXIS_LIST': ['x', 'y']}, {'NAME': 'random_world_rotation', 'WORLD_ROT_ANGLE': [-0.78539816, 0.78539816]}, {'NAME': 'random_world_scaling', 'WORLD_SCALE_RANGE': [0.95, 1.05]}, {'NAME': 'random_world_translation', 'NOISE_TRANSLATE_STD': [0.5, 0.5, 0.5]}]
+2024-10-27 08:56:15,142   INFO  ----------- POINT_FEATURE_ENCODING -----------
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.POINT_FEATURE_ENCODING.encoding_type: absolute_coordinates_encoding
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.POINT_FEATURE_ENCODING.used_feature_list: ['x', 'y', 'z', 'intensity']
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.POINT_FEATURE_ENCODING.src_feature_list: ['x', 'y', 'z', 'intensity']
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.DATA_PROCESSOR: [{'NAME': 'mask_points_and_boxes_outside_range', 'REMOVE_OUTSIDE_BOXES': True}, {'NAME': 'shuffle_points', 'SHUFFLE_ENABLED': {'train': True, 'test': True}}, {'NAME': 'transform_points_to_voxels_placeholder', 'VOXEL_SIZE': [0.1, 0.1, 0.2]}]
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG._BASE_CONFIG_: /home/liush/OpenPCDet_argo2/tools/cfgs/dataset_configs/argo2_dataset.yaml
+2024-10-27 08:56:15,142   INFO  ----------- SAMPLED_INTERVAL -----------
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.SAMPLED_INTERVAL.train: 1
+2024-10-27 08:56:15,142   INFO  cfg.DATA_CONFIG.SAMPLED_INTERVAL.test: 1
+2024-10-27 08:56:15,143   INFO  ----------- MODEL -----------
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.NAME: CenterPoint
+2024-10-27 08:56:15,143   INFO  ----------- VFE -----------
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.VFE.NAME: DynamicVoxelVFE
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.VFE.WITH_DISTANCE: False
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.VFE.USE_ABSLOTE_XYZ: True
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.VFE.USE_NORM: True
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.VFE.NUM_FILTERS: [64, 64]
+2024-10-27 08:56:15,143   INFO  ----------- BACKBONE_3D -----------
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.BACKBONE_3D.NAME: SparseHEDNet_slotformer
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.BACKBONE_3D.SED_FEATURE_DIM: 64
+2024-10-27 08:56:15,143   INFO  cfg.MODEL.BACKBONE_3D.SED_NUM_LAYERS: 1
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.SED_NUM_SBB: [4, 2, 2]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.SED_DOWN_STRIDE: [1, 2, 2]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.SED_DOWN_KERNEL_SIZE: [3, 3, 3]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD_FEATURE_DIM: 64
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD_NUM_LAYERS: 1
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD_NUM_SBB: [8, 4, 4]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD_DOWN_STRIDE: [1, 2, 2]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD_DOWN_KERNEL_SIZE: [3, 3, 3]
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.AFD: True
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.FG_THRESHOLD: 0.4
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.FEATMAP_STRIDE: 8
+2024-10-27 08:56:15,144   INFO  cfg.MODEL.BACKBONE_3D.DETACH_FEATURE: True
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.BACKBONE_3D.GREOUP_POOLING_KERNEL_SIZE: [7, 13, 3, 3]
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.BACKBONE_3D.GROUP_CLASS_NAMES: [['Regular_vehicle'], ['Large_vehicle', 'Bus', 'Box_truck', 'Truck', 'Vehicular_trailer', 'Truck_cab', 'School_bus', 'Articulated_bus', 'Message_board_trailer'], ['Pedestrian', 'Bicyclist', 'Motorcyclist', 'Wheeled_rider', "\\ 'Bollard'", 'Construction_cone', 'Sign', 'Construction_barrel', 'Stop_sign', 'Mobile_pedestrian_crossing_sign', "\\ 'Bicycle'", 'Motorcycle', 'Wheeled_device', 'Wheelchair', 'Stroller', 'Dog']]
+2024-10-27 08:56:15,145   INFO  ----------- DENSE_HEAD -----------
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.NAME: SparseDynamicHead
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.CLASS_AGNOSTIC: False
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.INPUT_FEATURES: 64
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.CLASS_NAMES_EACH_HEAD: [['Regular_vehicle'], ['Pedestrian', 'Bicyclist', 'Motorcyclist', 'Wheeled_rider'], ['Bollard', 'Construction_cone', 'Sign', 'Construction_barrel', 'Stop_sign', 'Mobile_pedestrian_crossing_sign'], ['Large_vehicle', 'Bus', 'Box_truck', 'Truck', 'Vehicular_trailer', 'Truck_cab', 'School_bus', 'Articulated_bus', 'Message_board_trailer'], ['Bicycle', 'Motorcycle', 'Wheeled_device', 'Wheelchair', 'Stroller'], ['Dog']]
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.DCLA_REG_WEIGHT: 0.25
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.DYNAMIC_POS_NUM: [25, 16, 16, 64, 16, 16]
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.CANDIDATE_NUM: [5, 5, 5, 5, 5, 5]
+2024-10-27 08:56:15,145   INFO  cfg.MODEL.DENSE_HEAD.KERNEL_SIZE_HEAD: 1
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.SHARED_CONV_CHANNEL: 64
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.USE_BIAS_BEFORE_NORM: True
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.NUM_HM_CONV: 2
+2024-10-27 08:56:15,146   INFO  ----------- SEPARATE_HEAD_CFG -----------
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_ORDER: ['center', 'center_z', 'dim', 'rot']
+2024-10-27 08:56:15,146   INFO  ----------- HEAD_DICT -----------
+2024-10-27 08:56:15,146   INFO  ----------- center -----------
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.center.out_channels: 2
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.center.num_conv: 2
+2024-10-27 08:56:15,146   INFO  ----------- center_z -----------
+2024-10-27 08:56:15,146   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.center_z.out_channels: 1
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.center_z.num_conv: 2
+2024-10-27 08:56:15,147   INFO  ----------- dim -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.dim.out_channels: 3
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.dim.num_conv: 2
+2024-10-27 08:56:15,147   INFO  ----------- rot -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.rot.out_channels: 2
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.SEPARATE_HEAD_CFG.HEAD_DICT.rot.num_conv: 2
+2024-10-27 08:56:15,147   INFO  ----------- TARGET_ASSIGNER_CONFIG -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.TARGET_ASSIGNER_CONFIG.FEATURE_MAP_STRIDE: 4
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.TARGET_ASSIGNER_CONFIG.NUM_MAX_OBJS: 500
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.TARGET_ASSIGNER_CONFIG.GAUSSIAN_OVERLAP: 0.1
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.TARGET_ASSIGNER_CONFIG.MIN_RADIUS: 2
+2024-10-27 08:56:15,147   INFO  ----------- LOSS_CONFIG -----------
+2024-10-27 08:56:15,147   INFO  ----------- LOSS_WEIGHTS -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.LOSS_CONFIG.LOSS_WEIGHTS.cls_weight: 1.0
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.LOSS_CONFIG.LOSS_WEIGHTS.loc_weight: 0.25
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.LOSS_CONFIG.LOSS_WEIGHTS.code_weights: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.2, 0.2]
+2024-10-27 08:56:15,147   INFO  ----------- POST_PROCESSING -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.SCORE_THRESH: 0.1
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.POST_CENTER_LIMIT_RANGE: [-200, -200, -20, 200, 200, 20]
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.MAX_OBJ_PER_SAMPLE: 500
+2024-10-27 08:56:15,147   INFO  ----------- NMS_CONFIG -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.NMS_CONFIG.NMS_TYPE: nms_gpu
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.NMS_CONFIG.NMS_THRESH: 0.1
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.NMS_CONFIG.NMS_PRE_MAXSIZE: 1000
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.DENSE_HEAD.POST_PROCESSING.NMS_CONFIG.NMS_POST_MAXSIZE: 83
+2024-10-27 08:56:15,147   INFO  ----------- POST_PROCESSING -----------
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.POST_PROCESSING.RECALL_THRESH_LIST: [0.3, 0.5, 0.7]
+2024-10-27 08:56:15,147   INFO  cfg.MODEL.POST_PROCESSING.EVAL_METRIC: kitti
+2024-10-27 08:56:15,147   INFO  ----------- OPTIMIZATION -----------
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.BATCH_SIZE_PER_GPU: 2
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.NUM_EPOCHS: 12
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.OPTIMIZER: adam_onecycle
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.LR: 0.003
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.WEIGHT_DECAY: 0.05
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.MOMENTUM: 0.9
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.MOMS: [0.95, 0.85]
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.PCT_START: 0.1
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.DIV_FACTOR: 100
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.DECAY_STEP_LIST: [35, 45]
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.LR_DECAY: 0.1
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.LR_CLIP: 1e-07
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.LR_WARMUP: False
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.WARMUP_EPOCH: 1
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.GRAD_NORM_CLIP: 10
+2024-10-27 08:56:15,148   INFO  cfg.OPTIMIZATION.LOSS_SCALE_FP16: 32.0
+2024-10-27 08:56:15,148   INFO  ----------- HOOK -----------
+2024-10-27 08:56:15,148   INFO  ----------- DisableAugmentationHook -----------
+2024-10-27 08:56:15,148   INFO  cfg.HOOK.DisableAugmentationHook.DISABLE_AUG_LIST: ['gt_sampling', 'random_world_flip', 'random_world_rotation', 'random_world_scaling', 'random_world_translation']
+2024-10-27 08:56:15,148   INFO  cfg.HOOK.DisableAugmentationHook.NUM_LAST_EPOCHS: 1
+2024-10-27 08:56:15,148   INFO  cfg.TAG: cbgs_voxel01_safdnet_slot_dy
+2024-10-27 08:56:15,148   INFO  cfg.EXP_GROUP_PATH: argo2_models
+2024-10-27 08:56:15,155   INFO  ----------- Create dataloader & network & optimizer -----------
+2024-10-27 08:57:10,786   INFO  Database filter by min points Regular_vehicle: 3795598 => 2879669
+2024-10-27 08:57:11,017   INFO  Database filter by min points Pedestrian: 1486565 => 1063727
+2024-10-27 08:57:11,042   INFO  Database filter by min points Bicyclist: 40137 => 17856
+2024-10-27 08:57:11,044   INFO  Database filter by min points Motorcyclist: 13442 => 4165
+2024-10-27 08:57:11,045   INFO  Database filter by min points Wheeled_rider: 8714 => 3747
+2024-10-27 08:57:11,095   INFO  Database filter by min points Bollard: 429857 => 214947
+2024-10-27 08:57:11,126   INFO  Database filter by min points Construction_cone: 176099 => 96675
+2024-10-27 08:57:11,139   INFO  Database filter by min points Sign: 79169 => 66488
+2024-10-27 08:57:11,155   INFO  Database filter by min points Construction_barrel: 121998 => 75608
+2024-10-27 08:57:11,193   INFO  Database filter by min points Stop_sign: 142649 => 110771
+2024-10-27 08:57:11,195   INFO  Database filter by min points Mobile_pedestrian_crossing_sign: 4069 => 2596
+2024-10-27 08:57:11,210   INFO  Database filter by min points Large_vehicle: 109464 => 96402
+2024-10-27 08:57:11,223   INFO  Database filter by min points Bus: 81933 => 76314
+2024-10-27 08:57:11,234   INFO  Database filter by min points Box_truck: 78851 => 74122
+2024-10-27 08:57:11,242   INFO  Database filter by min points Truck: 52754 => 49904
+2024-10-27 08:57:11,254   INFO  Database filter by min points Vehicular_trailer: 36656 => 32627
+2024-10-27 08:57:11,257   INFO  Database filter by min points Truck_cab: 17116 => 15571
+2024-10-27 08:57:11,260   INFO  Database filter by min points School_bus: 10905 => 10106
+2024-10-27 08:57:11,262   INFO  Database filter by min points Articulated_bus: 10176 => 9123
+2024-10-27 08:57:11,262   INFO  Database filter by min points Message_board_trailer: 914 => 857
+2024-10-27 08:57:11,279   INFO  Database filter by min points Bicycle: 136393 => 97635
+2024-10-27 08:57:11,291   INFO  Database filter by min points Motorcycle: 38899 => 28619
+2024-10-27 08:57:11,301   INFO  Database filter by min points Wheeled_device: 75804 => 45947
+2024-10-27 08:57:11,303   INFO  Database filter by min points Wheelchair: 3181 => 1732
+2024-10-27 08:57:11,305   INFO  Database filter by min points Stroller: 8170 => 4997
+2024-10-27 08:57:11,306   INFO  Database filter by min points Dog: 11174 => 7673
+2024-10-27 08:57:11,306   INFO  Loading GT database to shared memory
+2024-10-27 08:57:13,932   INFO  GT database has been saved to shared memory
+2024-10-27 08:57:15,701   INFO  Loading Argoverse2 dataset
+2024-10-27 08:57:19,050   INFO  Total samples for Argo2 dataset: 110071
+2024-10-27 08:57:19,269   INFO  ----------- Model CenterPoint created, param count: 5222573 -----------
+2024-10-27 08:57:19,269   INFO  DistributedDataParallel(
+  (module): CenterPoint(
+    (vfe): DynamicVoxelVFE(
+      (pfn_layers): ModuleList(
+        (0): PFNLayerV2(
+          (linear): Linear(in_features=10, out_features=32, bias=False)
+          (norm): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (1): PFNLayerV2(
+          (linear): Linear(in_features=64, out_features=64, bias=False)
+          (norm): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+      )
+    )
+    (backbone_3d): SparseHEDNet_slotformer(
+      (stem): SparseSequential(
+        (0): SparseSequential(
+          (0): SubMConv3d(64, 16, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[0, 0, 0], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+        (1): SparseBasicBlock3D(
+          (conv1): SubMConv3d(16, 16, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(16, 16, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (2): SparseBasicBlock3D(
+          (conv1): SubMConv3d(16, 16, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(16, 16, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (3): SparseSequential(
+          (0): SparseConv3d(16, 32, kernel_size=[3, 3, 3], stride=[2, 2, 2], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+        (4): SparseBasicBlock3D(
+          (conv1): SubMConv3d(32, 32, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(32, 32, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (5): SparseBasicBlock3D(
+          (conv1): SubMConv3d(32, 32, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(32, 32, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (6): SparseSequential(
+          (0): SparseConv3d(32, 64, kernel_size=[3, 3, 3], stride=[2, 2, 2], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+        (7): SparseBasicBlock3D(
+          (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (8): SparseBasicBlock3D(
+          (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (9): SparseBasicBlock3D(
+          (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (10): SparseBasicBlock3D(
+          (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (relu): ReLU()
+        )
+        (11): SparseSequential(
+          (0): SparseConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 2, 2], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (sed_layers): ModuleList(
+        (0): SEDLayer(
+          (encoder): ModuleList(
+            (0): SparseSequential(
+              (0): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (1): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (3): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+            (1): SparseSequential(
+              (0): SparseSequential(
+                (0): SparseConv3d(64, 64, kernel_size=[3, 3, 3], stride=[2, 2, 2], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (2): ReLU()
+              )
+              (1): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+            (2): SparseSequential(
+              (0): SparseSequential(
+                (0): SparseConv3d(64, 64, kernel_size=[3, 3, 3], stride=[2, 2, 2], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (2): ReLU()
+              )
+              (1): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock3D(
+                (conv1): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[1, 1, 1], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+          )
+          (decoder): ModuleList(
+            (0): SparseSequential(
+              (0): SparseInverseConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[0, 0, 0], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SparseSequential(
+              (0): SparseInverseConv3d(64, 64, kernel_size=[3, 3, 3], stride=[1, 1, 1], padding=[0, 0, 0], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+          )
+          (decoder_norm): ModuleList(
+            (0): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+            (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          )
+        )
+      )
+      (transition): SparseSequential(
+        (0): SparseSequential(
+          (0): SparseConv3d(64, 64, kernel_size=[3, 1, 1], stride=[2, 1, 1], padding=[0, 0, 0], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+        (1): SparseSequential(
+          (0): SparseConv3d(64, 64, kernel_size=[3, 1, 1], stride=[2, 1, 1], padding=[0, 0, 0], dilation=[1, 1, 1], output_padding=[0, 0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+          (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (cls_conv): SparseSequential(
+        (0): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+        (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+        (2): ReLU()
+        (3): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+      )
+      (afd_layers): ModuleList(
+        (0): SEDLayer(
+          (encoder): ModuleList(
+            (0): SparseSequential(
+              (0): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (1): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (3): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (4): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (5): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (6): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (7): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+            (1): SparseSequential(
+              (0): SparseSequential(
+                (0): SparseConv2d(64, 64, kernel_size=[3, 3], stride=[2, 2], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (2): ReLU()
+              )
+              (1): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (3): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (4): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+            (2): SparseSequential(
+              (0): SparseSequential(
+                (0): SparseConv2d(64, 64, kernel_size=[3, 3], stride=[2, 2], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (2): ReLU()
+              )
+              (1): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (2): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (3): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+              (4): SparseBasicBlock2D(
+                (conv1): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (conv2): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+                (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (relu): ReLU()
+              )
+            )
+          )
+          (decoder): ModuleList(
+            (0): SparseSequential(
+              (0): SparseInverseConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SparseSequential(
+              (0): SparseInverseConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+          )
+          (decoder_norm): ModuleList(
+            (0): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+            (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+          )
+        )
+      )
+      (upformer_stage0): SparseSequential(
+        (0): UpFormerLayer(
+          (sla_layers): ModuleList(
+            (0): SLAttnLayer(
+              (self_norm_layers): ModuleList(
+                (0): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              )
+              (self_attn_layers): ModuleList(
+                (0): SelfAttnLayer(
+                  (qkv): Linear(in_features=64, out_features=192, bias=False)
+                  (proj): Linear(in_features=64, out_features=64, bias=True)
+                )
+                (1): SelfAttnLayer(
+                  (qkv): Linear(in_features=64, out_features=192, bias=False)
+                  (proj): Linear(in_features=64, out_features=64, bias=True)
+                )
+              )
+              (ffn_layers): ModuleList(
+                (0): CWI_FFN_Layer(
+                  (bn): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (conv_k): SubMConv2d(16, 16, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_h): SubMConv2d(16, 16, kernel_size=[1, 13], stride=[1, 1], padding=[0, 6], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_w): SubMConv2d(16, 16, kernel_size=[13, 1], stride=[1, 1], padding=[6, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (fc1): Linear(in_features=64, out_features=128, bias=True)
+                  (act): ReLU()
+                  (fc2): Linear(in_features=128, out_features=64, bias=True)
+                )
+                (1): CWI_FFN_Layer(
+                  (bn): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (conv_k): SubMConv2d(16, 16, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_h): SubMConv2d(16, 16, kernel_size=[1, 13], stride=[1, 1], padding=[0, 6], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_w): SubMConv2d(16, 16, kernel_size=[13, 1], stride=[1, 1], padding=[6, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (fc1): Linear(in_features=64, out_features=128, bias=True)
+                  (act): ReLU()
+                  (fc2): Linear(in_features=128, out_features=64, bias=True)
+                )
+              )
+            )
+            (1): SLAttnLayer(
+              (self_norm_layers): ModuleList(
+                (0): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+              )
+              (self_attn_layers): ModuleList(
+                (0): SelfAttnLayer(
+                  (qkv): Linear(in_features=64, out_features=192, bias=False)
+                  (proj): Linear(in_features=64, out_features=64, bias=True)
+                )
+                (1): SelfAttnLayer(
+                  (qkv): Linear(in_features=64, out_features=192, bias=False)
+                  (proj): Linear(in_features=64, out_features=64, bias=True)
+                )
+              )
+              (ffn_layers): ModuleList(
+                (0): CWI_FFN_Layer(
+                  (bn): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (conv_k): SubMConv2d(16, 16, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_h): SubMConv2d(16, 16, kernel_size=[1, 13], stride=[1, 1], padding=[0, 6], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_w): SubMConv2d(16, 16, kernel_size=[13, 1], stride=[1, 1], padding=[6, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (fc1): Linear(in_features=64, out_features=128, bias=True)
+                  (act): ReLU()
+                  (fc2): Linear(in_features=128, out_features=64, bias=True)
+                )
+                (1): CWI_FFN_Layer(
+                  (bn): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (conv_k): SubMConv2d(16, 16, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_h): SubMConv2d(16, 16, kernel_size=[1, 13], stride=[1, 1], padding=[0, 6], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (conv_w): SubMConv2d(16, 16, kernel_size=[13, 1], stride=[1, 1], padding=[6, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+                  (bn2): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+                  (fc1): Linear(in_features=64, out_features=128, bias=True)
+                  (act): ReLU()
+                  (fc2): Linear(in_features=128, out_features=64, bias=True)
+                )
+              )
+            )
+          )
+        )
+        (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (up_block): SparseSequential(
+        (0): SparseConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+        (1): BatchNorm1d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+        (2): ReLU()
+      )
+      (shared_conv): SparseSequential(
+        (0): SubMConv2d(64, 64, kernel_size=[3, 3], stride=[1, 1], padding=[1, 1], dilation=[1, 1], output_padding=[0, 0], bias=False, algo=ConvAlgo.MaskImplicitGemm)
+        (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU()
+      )
+    )
+    (map_to_bev_module): None
+    (pfe): None
+    (backbone_2d): None
+    (dense_head): SparseDynamicHead(
+      (heads_list): ModuleList(
+        (0): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+        (1): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 4, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+        (2): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 6, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+        (3): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 9, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+        (4): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 5, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+        (5): SeparateHead(
+          (center): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (center_z): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (dim): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 3, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (rot): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 2, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+          (heatmap): Sequential(
+            (0): SparseSequential(
+              (0): SubMConv2d(64, 64, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+              (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU()
+            )
+            (1): SubMConv2d(64, 1, kernel_size=[1, 1], stride=[1, 1], padding=[0, 0], dilation=[1, 1], output_padding=[0, 0], algo=ConvAlgo.MaskImplicitGemm)
+          )
+        )
+      )
+      (get_dynamic_masks): DynamicPositiveMaskCenter()
+      (hm_loss_func): FocalLossSparse()
+      (reg_loss_func): UpFormerL1Loss()
+      (crit_iou): UpFormerIoULoss()
+    )
+    (point_head): None
+    (roi_head): None
+  )
+)
+2024-10-27 08:57:19,278   INFO  **********************Start training argo2_models/cbgs_voxel01_safdnet_slot_dy(default)**********************
+2024-10-27 09:02:22,709   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:07:23,052   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:12:23,702   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:17:22,811   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:22:23,530   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:27:22,898   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:32:22,839   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:37:22,540   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:42:23,072   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:47:23,128   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:52:23,416   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 09:57:23,312   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:02:23,180   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:07:23,524   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:12:22,876   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:17:23,536   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:22:22,552   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:27:23,435   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:32:23,586   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:37:22,741   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:42:23,185   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:47:23,040   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:52:23,270   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 10:57:23,143   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:02:22,991   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:07:22,961   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:11:20,927   INFO  epoch0_losses: 15.789095211133015
+2024-10-27 11:16:23,703   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:21:23,348   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:26:22,745   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:31:23,482   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:36:23,531   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:41:23,473   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:46:23,089   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:51:23,117   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 11:56:23,483   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:01:23,434   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:06:23,463   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:11:23,782   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:16:23,649   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:21:23,471   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:26:23,053   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:31:22,994   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:36:23,449   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:41:22,965   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:46:23,388   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:51:23,247   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 12:56:23,227   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:01:22,744   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:06:23,504   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:11:23,040   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:16:23,224   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:21:23,763   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:26:23,547   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:28:21,090   INFO  epoch1_losses: 10.177413816767377
+2024-10-27 13:33:23,171   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:38:23,780   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:43:23,451   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:48:23,677   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:53:24,290   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 13:58:24,126   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:03:23,996   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:08:23,777   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:13:24,005   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:18:23,154   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:23:23,356   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:28:23,722   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:33:23,981   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:38:23,967   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:43:23,515   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:48:23,293   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:53:23,716   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 14:58:24,465   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:03:22,895   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:08:23,853   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:13:23,356   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:18:23,340   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:23:25,134   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:28:23,051   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:33:23,729   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:38:25,575   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:43:24,917   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:45:33,348   INFO  epoch2_losses: 9.383982989451914
+2024-10-27 15:50:36,568   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 15:55:37,463   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:00:35,931   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:05:36,350   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:10:36,854   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:15:36,312   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:20:35,437   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:25:36,580   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:30:36,569   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:35:36,080   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:40:35,456   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:45:35,969   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:50:38,532   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 16:55:36,214   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:00:35,283   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:05:37,046   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:10:37,355   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:15:36,400   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:20:36,384   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:25:37,027   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:30:36,317   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:35:36,443   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:40:37,146   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:45:36,297   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:50:36,145   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 17:55:36,110   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:00:36,355   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:03:05,815   INFO  epoch3_losses: 9.067690616828758
+2024-10-27 18:08:08,363   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:13:08,591   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:18:08,611   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:23:07,665   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:28:08,463   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:33:08,737   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:38:08,776   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:43:08,223   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:48:08,809   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:53:08,387   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 18:58:07,794   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:03:07,782   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:08:08,380   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:13:07,815   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:18:07,614   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:23:08,842   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:28:08,229   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:33:08,481   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:38:08,727   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:43:08,260   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:48:07,788   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:53:08,179   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 19:58:08,146   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:03:07,643   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:08:08,468   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:13:08,283   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:18:17,172   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:20:23,771   INFO  epoch4_losses: 8.814156759114459
+2024-10-27 20:25:26,364   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:30:26,604   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:35:25,516   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:40:26,358   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:45:25,659   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:50:25,968   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 20:55:26,371   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:00:26,596   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:05:25,647   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:10:26,454   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:15:25,740   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:20:26,120   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:25:25,542   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:30:26,439   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:35:26,611   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:40:25,976   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:45:26,254   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:50:25,561   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 21:55:25,666   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:00:25,806   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:05:25,462   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:10:25,488   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:15:26,464   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:20:26,444   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:25:26,395   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:30:25,912   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:35:25,944   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:38:34,217   INFO  epoch5_losses: 8.56938374160334
+2024-10-27 22:43:36,693   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:48:36,802   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:53:37,586   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 22:58:37,079   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:03:36,744   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:08:36,546   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:13:37,598   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:18:37,884   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:23:36,777   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:28:36,686   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:33:37,743   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:38:37,360   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:43:36,891   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:48:37,633   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:53:36,879   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-27 23:58:37,714   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:03:37,695   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:08:36,577   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:13:36,627   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:18:36,799   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:23:37,299   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:28:36,574   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:33:37,033   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:38:37,548   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:43:36,835   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:48:36,576   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:53:37,171   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:58:36,993   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 00:58:48,618   INFO  epoch6_losses: 8.290136185600314
+2024-10-28 01:03:51,045   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:08:51,163   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:13:51,388   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:18:50,265   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:23:51,306   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:28:50,775   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:33:50,455   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:38:50,715   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:43:50,772   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:48:50,560   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:53:50,271   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 01:58:51,159   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:03:51,294   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:08:50,916   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:13:50,395   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:18:51,029   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:23:50,335   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:28:51,210   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:33:50,484   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:38:50,828   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:43:51,322   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:48:51,053   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:53:52,636   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 02:58:51,466   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:03:51,120   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:08:50,836   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:13:50,505   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:18:50,979   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:19:28,005   INFO  epoch7_losses: 7.9910750322910244
+2024-10-28 03:24:30,623   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:29:30,039   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:34:29,920   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:39:30,808   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:44:30,815   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:49:30,932   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:54:30,682   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 03:59:30,844   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:04:30,874   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:09:30,515   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:14:30,430   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:19:30,356   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:24:31,000   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:29:30,627   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:34:30,529   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:39:29,998   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:44:30,566   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:49:30,580   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:54:30,456   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 04:59:30,233   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:04:30,284   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:09:30,153   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:14:30,542   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:19:30,384   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:24:29,861   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:29:30,631   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:34:30,097   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:38:51,703   INFO  epoch8_losses: 7.6536020053334015
+2024-10-28 05:43:53,988   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:48:53,385   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:53:54,366   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 05:58:54,184   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:03:53,604   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:08:53,557   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:13:53,541   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:18:53,888   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:23:53,841   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:28:53,848   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:33:53,655   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:38:54,441   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:43:53,504   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:48:53,740   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:53:54,052   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 06:58:54,506   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:03:54,115   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:08:53,852   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:13:53,712   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:18:54,361   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:23:53,790   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:28:53,804   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:33:53,591   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:38:53,642   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:43:53,786   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:48:54,243   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:53:54,177   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 07:58:04,257   INFO  epoch9_losses: 7.30281885458633
+2024-10-28 08:03:06,423   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:08:06,113   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:13:06,414   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:18:06,805   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:23:06,248   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:28:06,617   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:33:05,998   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:38:06,085   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:43:06,396   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:48:06,570   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:53:06,094   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 08:58:07,097   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:03:05,902   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:08:06,423   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:13:06,856   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:18:06,784   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:23:06,628   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:28:06,941   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:33:06,016   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:38:06,582   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:43:07,005   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:48:06,179   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:53:06,787   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 09:58:06,424   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:03:06,875   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:08:06,405   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:13:06,601   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:17:22,726   INFO  epoch10_losses: 6.998232360738655
+2024-10-28 10:17:23,047   INFO  Disable augmentations: ['gt_sampling', 'random_world_flip', 'random_world_rotation', 'random_world_scaling', 'random_world_translation']
+2024-10-28 10:17:23,047   INFO  Deleting GT database from shared memory
+2024-10-28 10:17:25,377   INFO  GT database has been removed from shared memory
+2024-10-28 10:22:38,011   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:27:38,169   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:32:37,998   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:37:37,841   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:42:37,225   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:47:38,073   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:52:37,201   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 10:57:37,812   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:02:37,967   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:07:37,469   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:12:37,187   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:17:37,759   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:22:37,669   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:27:37,419   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:32:38,143   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:37:37,884   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:42:37,668   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:47:37,375   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:52:37,738   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 11:57:37,472   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:02:37,385   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:07:37,920   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:12:37,928   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:17:37,401   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:22:37,791   INFO  Save latest model to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/latest_model
+2024-10-28 12:24:25,524   INFO  epoch11_losses: 7.8746665511193665
+2024-10-28 12:24:25,774   INFO  batch_losses: [15.789095211133015, 10.177413816767377, 9.383982989451914, 9.067690616828758, 8.814156759114459, 8.56938374160334, 8.290136185600314, 7.9910750322910244, 7.6536020053334015, 7.30281885458633, 6.998232360738655, 7.8746665511193665]
+2024-10-28 12:24:27,127   INFO  **********************End training argo2_models/cbgs_voxel01_safdnet_slot_dy(default)**********************
+
+
+
+2024-10-28 12:24:27,127   INFO  **********************Start evaluation argo2_models/cbgs_voxel01_safdnet_slot_dy(default)**********************
+2024-10-28 12:24:27,128   INFO  Loading Argoverse2 dataset
+2024-10-28 12:24:28,137   INFO  Total samples for Argo2 dataset: 23547
+2024-10-28 12:24:28,293   INFO  ==> Loading parameters from checkpoint /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/ckpt/checkpoint_epoch_12.pth to CPU
+2024-10-28 12:24:28,403   INFO  ==> Checkpoint trained from version: pcdet+0.6.0+8caccce
+2024-10-28 12:24:28,439   INFO  ==> Done (loaded 908/908)
+2024-10-28 12:24:28,451   INFO  *************** EPOCH 12 EVALUATION *****************
+2024-10-28 12:30:20,527   INFO  *************** Performance of EPOCH 12 *****************
+2024-10-28 12:30:20,527   INFO  Generate label finished(sec_per_example: 0.0149 second).
+2024-10-28 12:30:20,527   INFO  recall_roi_0.3: 0.000000
+2024-10-28 12:30:20,527   INFO  recall_rcnn_0.3: 0.787359
+2024-10-28 12:30:20,527   INFO  recall_roi_0.5: 0.000000
+2024-10-28 12:30:20,527   INFO  recall_rcnn_0.5: 0.586624
+2024-10-28 12:30:20,527   INFO  recall_roi_0.7: 0.000000
+2024-10-28 12:30:20,527   INFO  recall_rcnn_0.7: 0.300083
+2024-10-28 12:30:20,548   INFO  Average predicted number of objects(23547 samples): 165.425
+2024-10-28 12:33:39,164   INFO                                      AP    ATE    ASE    AOE    CDS
+ARTICULATED_BUS                  0.318  0.710  0.143  0.259  0.257
+BICYCLE                          0.537  0.320  0.247  0.726  0.423
+BICYCLIST                        0.410  0.237  0.238  0.892  0.322
+BOLLARD                          0.634  0.134  0.464  0.884  0.462
+BOX_TRUCK                        0.472  0.519  0.223  0.161  0.388
+BUS                              0.483  0.478  0.180  0.176  0.407
+CONSTRUCTION_BARREL              0.699  0.130  0.273  0.708  0.568
+CONSTRUCTION_CONE                0.566  0.120  0.416  0.674  0.436
+DOG                              0.257  0.301  0.467  1.303  0.169
+LARGE_VEHICLE                    0.087  0.589  0.278  0.509  0.066
+MESSAGE_BOARD_TRAILER            0.000  2.000  1.000  3.142  0.000
+MOBILE_PEDESTRIAN_CROSSING_SIGN  0.438  0.077  0.355  1.716  0.301
+MOTORCYCLE                       0.625  0.225  0.222  0.482  0.523
+MOTORCYCLIST                     0.561  0.237  0.236  0.856  0.444
+PEDESTRIAN                       0.729  0.239  0.250  1.315  0.538
+REGULAR_VEHICLE                  0.774  0.362  0.172  0.303  0.658
+SCHOOL_BUS                       0.448  0.425  0.122  0.094  0.393
+SIGN                             0.230  0.298  0.335  0.442  0.182
+STOP_SIGN                        0.500  0.195  0.398  0.246  0.404
+STROLLER                         0.345  0.220  0.312  0.280  0.286
+TRUCK                            0.262  0.365  0.132  0.161  0.230
+TRUCK_CAB                        0.289  0.753  0.256  0.105  0.225
+VEHICULAR_TRAILER                0.320  0.647  0.173  0.663  0.244
+WHEELCHAIR                       0.047  0.248  0.319  1.094  0.035
+WHEELED_DEVICE                   0.302  0.342  0.146  0.716  0.247
+WHEELED_RIDER                    0.120  0.267  0.315  0.541  0.095
+AVERAGE_METRICS                  0.402  0.401  0.295  0.710  0.319
+2024-10-28 12:33:39,261   INFO  Result is saved to /home/liush/OpenPCDet_argo2/output/argo2_models/cbgs_voxel01_safdnet_slot_dy/default/eval/eval_with_train/epoch_12/val
+2024-10-28 12:33:39,261   INFO  ****************Evaluation done.*****************
