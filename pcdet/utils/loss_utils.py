@@ -862,6 +862,75 @@ class DynamicPositiveMask(nn.Module):
 
         return positive_masks * masks
     
+
+class DynamicPositiveMask_Multi(nn.Module):
+    def __init__(self, cls_weight=1, reg_weight=2, voxel_size=[0.8, 0.8]) -> None:
+        super().__init__()
+        self.cls_weight = cls_weight
+        self.reg_weight = reg_weight
+        self.voxel_size = voxel_size
+    
+    def cls_cost(self, pred_cls, pos_mask):
+        cls_score = torch.max(pred_cls * pos_mask, dim=-1)[0]
+        cls_cost = 1 - cls_score
+    
+        return cls_cost
+    
+    def rwiou_cost(self, pred_reg, gt_reg, mask, r_factor=0.5):
+        isnotnan = (~ torch.isnan(gt_reg)).float().all(dim=-1)
+        
+        u, rdiou = box_utils.get_rwiou(pred_reg, gt_reg, r_factor, self.voxel_size)
+            
+        focal_reg_loss = 1 - torch.clamp(rdiou, min=0, max = 1.0) + u
+        rdiou_loss_src = focal_reg_loss * mask * isnotnan
+
+        return rdiou_loss_src, u
+    
+    def l1_cost(self, regr, gt_regr, mask, r_factor=0.2):
+        isnotnan = (~ torch.isnan(gt_regr)).float().all(dim=-1)
+        mask *= isnotnan
+        loss = torch.abs(regr - gt_regr)
+        loss[:, -2:] *= r_factor
+        loss = loss.sum(-1) * mask
+        # loss = loss / torch.clamp_min(num, min=1.0)
+        # import pdb; pdb.set_trace()
+        return loss
+    
+    def gaussian_heatmap(self, distances, radius=2, normalize=True, eps=0.01):
+        sigma = (2 * radius + 1) / 6
+        h = torch.exp(-(distances) / (2 * sigma * sigma))
+        if normalize:
+            h = h / (h.max() + eps)
+        return h
+
+    def distance(self, voxel_indices, center):
+        distances = ((voxel_indices - center.unsqueeze(0))**2).sum(-1)
+        return distances
+    
+    def forward(self, pred_cls, target_cls, pred_reg, gt_reg, masks, iou_target, candidate_num, r_factor=0.5):
+        with torch.no_grad():
+            cls_cost = self.cls_cost(pred_cls, target_cls)  # [bs, max_num_boxes, dynamic_pos_num]
+            reg_cost, u = self.rwiou_cost(pred_reg, gt_reg, masks, r_factor) # [bs, max_num_boxes, dynamic_pos_num]
+            # reg_cost = self.l1_cost(pred_reg, gt_reg, masks, r_factor)
+        
+        positive_masks = target_cls.new_zeros(*masks.shape)
+
+        all_cost = self.cls_weight * cls_cost * masks + self.reg_weight * reg_cost + (1 - masks.float()) * 100
+
+        sort_cost, local_sort_inds = torch.sort(all_cost[..., :candidate_num], dim=-1)
+        
+        positive_nums = torch.sum(iou_target[..., :candidate_num], dim=-1).clamp(1).int() # [bs, max_num_boxes]
+
+        for batch_id in range(pred_cls.shape[0]):
+            box_num = (torch.sum(masks[batch_id], -1) > 0).sum()
+            for box_id in range(box_num):
+                cur_positive_nums = positive_nums[batch_id][box_id]
+                positive_masks[batch_id][box_id] = iou_target[batch_id][box_id]
+                cur_ind = local_sort_inds[batch_id][box_id][:cur_positive_nums]
+                positive_masks[batch_id][box_id][cur_ind] = 1
+
+        return positive_masks * masks
+    
 class UpFormerL1Loss(nn.Module):
     def __init__(self) -> None:
         super().__init__()

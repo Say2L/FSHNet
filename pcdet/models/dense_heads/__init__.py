@@ -8,6 +8,7 @@ from .center_head import CenterHead
 from .voxelnext_head import VoxelNeXtHead
 from .transfusion_head import TransFusionHead
 from .sparse_dynamic_head import SparseDynamicHead
+from .sparse_dynamic_head_multi import SparseDynamicHead_multi
 from .sparse_center_head import SparseCenterHead
 
 __all__ = {
@@ -21,5 +22,6 @@ __all__ = {
     'VoxelNeXtHead': VoxelNeXtHead,
     'TransFusionHead': TransFusionHead,
     'SparseDynamicHead': SparseDynamicHead,
+    'SparseDynamicHead_multi': SparseDynamicHead_multi,
     'SparseCenterHead': SparseCenterHead,
 }
